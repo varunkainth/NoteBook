@@ -1,35 +1,57 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useEffect } from 'react';
+import { Routes, Route, Link } from 'react-router-dom';
+import './App.css';
+import Registration from './components/Registration';
 
 function App() {
-  const [count, setCount] = useState(0)
+  useEffect(() => {
+    const generateBubbles = () => {
+      const container = document.querySelector('.landing-page');
+
+      
+      container.querySelectorAll('.bubble').forEach(bubble => bubble.remove());
+
+      for (let i = 0; i < 10; i++) {
+        const bubble = document.createElement('div');
+        bubble.classList.add('bubble');
+      
+        bubble.style.width = `${Math.random() * 60 + 40}px`;
+        bubble.style.height = bubble.style.width;
+        bubble.style.left = `${Math.random() * 100}vw`;
+        bubble.style.bottom = `${Math.random() * 100}vh`;
+        container.appendChild(bubble);
+      }
+    };
+
+    generateBubbles();
+    const interval = setInterval(generateBubbles, 3000); // 
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className="landing-page">
+      <header className="header">
+        <h1>Welcome to NoteMaster!</h1>
+        <p>Your Ultimate Note-Taking Companion.</p>
+      </header>
+      <main className="main-content">
+        <p>Transform your note-taking experience with NoteMaster. Create, organize, and manage your notes effortlessly with our intuitive app.</p>
+        <div className="button-container">
+          <Link to="/Register">
+            <button className="btn">Register</button>
+          </Link>
+          <Link to="/Login">
+            <button className="btn">Login</button>
+          </Link>
+        </div>
+      </main>
+      <footer className="footer">
+        <p>&copy; 2024 NoteMaster Inc. All rights reserved.</p>
+      </footer>
+    </div>
+  );
 }
 
-export default App
+export default App;
+
