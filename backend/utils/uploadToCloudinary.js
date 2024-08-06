@@ -11,9 +11,10 @@ const uploadFile = async (
   const folder = isProfilePic
     ? `NotesApp/users/${userId}/profilePic`
     : `NotesApp/users/${userId}/notes/${noteId || noteTitle}`;
+  
 
   try {
-    const result = await cloudinary.v2.uploader.upload(filePath, {
+    const result = await cloudinary.uploader.upload(filePath, {
       folder: folder,
     });
 
