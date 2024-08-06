@@ -1,6 +1,7 @@
 import User from "../models/User.js";
 import TokenGen from "../utils/TokenGen.js";
 import uploadFile from "../utils/uploadToCloudinary.js";
+import bcrypt from "bcryptjs"
 
 export const AuthRegister = async (req, res) => {
   try {

@@ -6,7 +6,7 @@ const TokenVerification = async (req, res, next) => {
     // Retrieve the token from headers or cookies
     const authHeader = req.headers.authorization;
     const tokenFromHeader = authHeader && authHeader.startsWith('Bearer ') ? authHeader.split(' ')[1] : null;
-    const tokenFromCookie = req.cookies.token;
+    const tokenFromCookie = req.cookies.Token;
 
     // Prefer the token from headers if available
     const token = tokenFromHeader || tokenFromCookie;

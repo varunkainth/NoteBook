@@ -20,20 +20,26 @@ export const CreateNote = async (req, res) => {
     });
 
     // Handle attachments
-    if (req.files && req.files.attachments) {
-      const attachmentPromises = req.files.attachments.map(async (file) => {
-        const result = await uploadFile(file.path); // Upload to Cloudinary
-        return {
-          type: file.mimetype.split("/")[0], // Get the type (e.g., image, document)
-          url: result.url, // Cloudinary URL
-          size: file.size // Size of the file
-        };
-      });
-
-      note.attachments = await Promise.all(attachmentPromises);
+    if (req.files && req.files.length > 0) {
+      try {
+        const attachmentPromises = req.files.map(async (file) => {
+          const result = await uploadFile(req.user._id, note._id, title, file.path); // Upload to Cloudinary
+          console.log(result);
+          return {
+            type: file.mimetype.split("/")[0], // Get the type (e.g., image, document)
+            url: result.url, // Cloudinary URL
+            size: file.size // Size of the file
+          };
+        });
+    
+        note.attachments = await Promise.all(attachmentPromises);
+        
+        await note.save();
+      } catch (error) {
+        console.error("Error uploading files:", error);
+        return res.status(500).json({ message: "Internal server error" });
+      }
     }
-
-    await note.save();
 
     res.status(201).json({ message: "Note created successfully.", note });
   } catch (err) {

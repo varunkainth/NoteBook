@@ -23,10 +23,22 @@ app.use(
   })
 );
 
+app.use((err, req, res, next) => {
+  if (err instanceof multer.MulterError) {
+    // Multer specific errors
+    res.status(400).send(err.message);
+  } else {
+    // Other errors
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+
 // Routes
 import AUTHROUTES from "./routes/Auth.js";
 import USERROUTES from "./routes/User.js";
 import NOTESROUTES from "./routes/Note.js";
+import multer from "multer";
 
 app.use("/api/auth", AUTHROUTES);
 app.use("/api/users", USERROUTES);
