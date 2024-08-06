@@ -24,6 +24,13 @@ app.use(
 );
 
 // Routes
+import AUTHROUTES from "./routes/Auth.js";
+import USERROUTES from "./routes/User.js";
+import NOTESROUTES from "./routes/Note.js";
+
+app.use("/api/auth", AUTHROUTES);
+app.use("/api/users", USERROUTES);
+app.use("/api/notes/", NOTESROUTES);
 
 // Home Route
 app.get("/", (req, res) => {
