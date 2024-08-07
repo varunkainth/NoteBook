@@ -1,0 +1,55 @@
+/* themes.css */
+:root {
+    --primary-color: #ff69b4;
+    --secondary-color: #ff1493;
+    --background-color: #f8f9fa;
+    --header-background: #ff69b4;
+    --footer-background: #ff1493;
+    --button-background: #ff69b4;
+    --button-hover-background: #ff1493;
+  }
+  
+  /* Dark Theme */
+  :root.dark {
+    --primary-color: #222;
+    --secondary-color: #444;
+    --background-color: #333;
+    --header-background: #222;
+    --footer-background: #444;
+    --button-background: #555;
+    --button-hover-background: #666;
+  }
+  
+  /* Light Theme */
+  :root.light {
+    --primary-color: #ff69b4;
+    --secondary-color: #ff1493;
+    --background-color: #f8f9fa;
+    --header-background: #ff69b4;
+    --footer-background: #ff1493;
+    --button-background: #ff69b4;
+    --button-hover-background: #ff1493;
+  }
+  body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+  }
+  
+  .header {
+    background-color: var(--header-bg-color);
+    color: var(--header-text-color);
+  }
+  
+  .footer {
+    background-color: var(--footer-bg-color);
+    color: var(--footer-text-color);
+  }
+  
+  .btn {
+    background-color: var(--btn-bg-color);
+    color: #ff1493;
+  }
+  
+  .btn:hover {
+    background-color: var(--btn-hover-bg-color);
+  }
