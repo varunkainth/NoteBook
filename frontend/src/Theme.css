@@ -34,22 +34,13 @@
     background-color: var(--bg-color);
     color: var(--text-color);
   }
-  
-  .header {
-    background-color: var(--header-bg-color);
-    color: var(--header-text-color);
+
+  .theme-light {
+    @apply bg-white text-black;
   }
   
-  .footer {
-    background-color: var(--footer-bg-color);
-    color: var(--footer-text-color);
+  .theme-dark {
+    @apply bg-black text-white;
   }
   
-  .btn {
-    background-color: var(--btn-bg-color);
-    color: #ff1493;
-  }
   
-  .btn:hover {
-    background-color: var(--btn-hover-bg-color);
-  }

@@ -18,7 +18,7 @@ app.use(
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "*",
+    origin: ["*","https://supreme-space-goldfish-vgwjr44x77p2pq45-3000.app.github.dev"],
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
   })
 );

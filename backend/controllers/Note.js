@@ -1,13 +1,16 @@
 import Note from "../models/Note.js";
 import cloudinary from "../config/cloudinary.js";
 import uploadFile from "../utils/uploadToCloudinary.js"; // Assuming you have a utility function for uploading files
+import User from "../models/User.js";
 
 export const CreateNote = async (req, res) => {
   try {
     const { title, group, color, content } = req.body;
 
     if (!title || !content) {
-      return res.status(400).json({ message: "Please fill in all required fields." });
+      return res
+        .status(400)
+        .json({ message: "Please fill in all required fields." });
     }
 
     // Create the note
@@ -16,24 +19,39 @@ export const CreateNote = async (req, res) => {
       content,
       userId: req.user._id,
       color: color || undefined,
-      group: group || undefined
+      group: group || undefined,
     });
+
+    const user = await User.findByIdAndUpdate(
+      req.user._id,
+      {
+        $push: { notes: note._id },
+      },
+      {
+        new: true,
+      }
+    );
 
     // Handle attachments
     if (req.files && req.files.length > 0) {
       try {
         const attachmentPromises = req.files.map(async (file) => {
-          const result = await uploadFile(req.user._id, note._id, title, file.path); // Upload to Cloudinary
+          const result = await uploadFile(
+            req.user._id,
+            note._id,
+            title,
+            file.path
+          ); // Upload to Cloudinary
           console.log(result);
           return {
             type: file.mimetype.split("/")[0], // Get the type (e.g., image, document)
             url: result.url, // Cloudinary URL
-            size: file.size // Size of the file
+            size: file.size, // Size of the file
           };
         });
-    
+
         note.attachments = await Promise.all(attachmentPromises);
-        
+
         await note.save();
       } catch (error) {
         console.error("Error uploading files:", error);
@@ -86,7 +104,7 @@ export const updateNote = async (req, res) => {
         return {
           type: file.mimetype.split("/")[0], // Get the type (e.g., image, document)
           url: result.url, // Cloudinary URL
-          size: file.size // Size of the file
+          size: file.size, // Size of the file
         };
       });
 
@@ -130,7 +148,9 @@ export const removeAttachment = async (req, res) => {
     }
 
     // Find the attachment to remove
-    const attachmentIndex = note.attachments.findIndex(att => att._id.toString() === attachmentId);
+    const attachmentIndex = note.attachments.findIndex(
+      (att) => att._id.toString() === attachmentId
+    );
     if (attachmentIndex === -1) {
       return res.status(404).json({ message: "Attachment not found." });
     }
@@ -140,7 +160,7 @@ export const removeAttachment = async (req, res) => {
 
     // Delete the attachment from Cloudinary
     if (removedAttachment.url) {
-      const publicId = removedAttachment.url.split('/').pop().split('.')[0]; // Extract the public ID from the URL
+      const publicId = removedAttachment.url.split("/").pop().split(".")[0]; // Extract the public ID from the URL
       await cloudinary.uploader.destroy(publicId); // Delete from Cloudinary
     }
 
@@ -158,7 +178,9 @@ export const saveCoordinates = async (req, res) => {
 
     // Validate coordinates
     if (x === undefined || y === undefined) {
-      return res.status(400).json({ message: "Coordinates x and y are required" });
+      return res
+        .status(400)
+        .json({ message: "Coordinates x and y are required" });
     }
 
     // Find the note by ID

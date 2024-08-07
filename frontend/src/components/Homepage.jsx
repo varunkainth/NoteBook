@@ -1,9 +1,10 @@
 // src/components/HomePage.js
 
-import React, { useEffect } from 'react';
+import  { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { clearAuthError } from '../state/auth/AuthSlice'; // Adjust the import path as necessary
+import SideNavbar from './SideNavbar';
 
 const HomePage = () => {
   const dispatch = useDispatch();
@@ -40,6 +41,7 @@ const HomePage = () => {
 
   return (
     <div className='flex items-center justify-center min-h-screen bg-gray-100'>
+      <SideNavbar/>
       <div className='w-full max-w-md bg-white shadow-lg rounded-lg p-6'>
         <h1 className='text-3xl font-semibold text-gray-800 mb-4 text-center'>
           Welcome, {user?.name}!

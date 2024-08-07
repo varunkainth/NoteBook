@@ -122,7 +122,7 @@ export const AuthLogin = async (req, res) => {
     res.header("Authorization", `Bearer ${token}`);
     const userWithNotes = await User.findById(user._id)
       .select("-password")
-      .populate("notesId");
+      .populate("notes");
 
     return res.status(200).json({
       message: "User logged in successfully.",

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import { FaUser } from 'react-icons/fa'; // Importing the user icon for placeholder
 import './UpdateProfile.css'; 
 

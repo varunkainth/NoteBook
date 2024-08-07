@@ -122,5 +122,7 @@ const authSlice = createSlice({
   },
 });
 
+export const selectIsAuthenticated = (state) => !!state.auth.token;
+
 export const { clearAuthError, setUser, clearUser } = authSlice.actions;
 export default authSlice.reducer;
