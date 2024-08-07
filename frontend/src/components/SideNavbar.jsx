@@ -1,8 +1,8 @@
-// src/components/SideNavbar.jsx
+
 import React from 'react';
-import { FaSignOutAlt, FaMoon, FaSun, FaUserEdit } from 'react-icons/fa';
+import { FaSignOutAlt, FaMoon, FaSun, FaUserEdit, FaHome } from 'react-icons/fa';
 import { useTheme } from '../ThemeContext';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom'; 
 import './SideNavbar.css';
 
 const SideNavbar = () => {
@@ -10,9 +10,7 @@ const SideNavbar = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    
     localStorage.removeItem('authToken');
-   
     navigate('/login');
   };
 
@@ -22,6 +20,10 @@ const SideNavbar = () => {
         <h2>NoteMaster</h2>
       </div>
       <div className="sidebar-menu">
+        <div className="sidebar-item" onClick={() => navigate('/sticky-notes')}>
+          <FaHome />
+          <span>Home</span>
+        </div>
         <div className="sidebar-item" onClick={toggleTheme}>
           {theme === 'light' ? <FaMoon /> : <FaSun />}
           <span>{theme === 'light' ? 'Dark Mode' : 'Light Mode'}</span>
