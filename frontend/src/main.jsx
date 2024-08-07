@@ -33,4 +33,17 @@ root.render(
       </Router>
     </ThemeProvider>
   </Provider>
+  <ThemeProvider>
+    
+    <Router>
+    <SideNavbar/>
+    
+      <Routes>
+        <Route path="/" element={<App />} />
+        <Route path="/Register" element={<Registration />} />
+        <Route path="/update-profile" element={<UpdateProfile />} />
+        <Route path="/sticky-notes" element={<StickyNotes />} />
+      </Routes>
+    </Router>
+  </ThemeProvider>
 );
