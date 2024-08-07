@@ -4,14 +4,18 @@ import  { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { clearAuthError } from '../state/auth/AuthSlice'; // Adjust the import path as necessary
-import SideNavbar from './SideNavbar';
+// import SideNavbar from './SideNavbar';
+// import StickyNote from './StickyNote';
+// import NotesComponent from '../pages/Notes';
+// import NotesList from '../pages/Notes';
+import NotesPage from '../pages/NotesDisplay';
 
 const HomePage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   
   // Get the user and token from the Redux store
-  const { user, token, loading, error } = useSelector((state) => state.auth);
+  const { user, token, loading, } = useSelector((state) => state.auth);
 
   useEffect(() => {
     // Check if user or token is missing
@@ -25,24 +29,24 @@ const HomePage = () => {
 
   if (loading) {
     return (
-      <div className='flex items-center justify-center h-screen bg-gray-100'>
+      <div className='flex items-center justify-center h-full bg-gray-100'>
         <div className='text-xl text-gray-700'>Loading...</div>
       </div>
     );
   }
 
-  if (error) {
-    return (
-      <div className='flex items-center justify-center h-screen bg-gray-100'>
-        <div className='text-xl text-red-600'>{error}</div>
-      </div>
-    );
-  }
+  // if (error) {
+  //   return (
+  //     <div className='flex items-center justify-center h-screen bg-gray-100'>
+  //       <div className='text-xl text-red-600'>{error}</div>
+  //     </div>
+  //   );
+  // }
 
   return (
-    <div className='flex items-center justify-center min-h-screen bg-gray-100'>
-      <SideNavbar/>
-      <div className='w-full max-w-md bg-white shadow-lg rounded-lg p-6'>
+    <div >
+      {/* <SideNavbar/> */}
+      {/* <div className='w-full max-w-md bg-white shadow-lg rounded-lg p-6'>
         <h1 className='text-3xl font-semibold text-gray-800 mb-4 text-center'>
           Welcome, {user?.name}!
         </h1>
@@ -56,7 +60,7 @@ const HomePage = () => {
           <span className='font-bold'>Gender:</span> {user?.gender}
         </p>
         {/* Add more user details as needed */}
-        <div className='text-center'>
+        {/* <div className='text-center'>
           <button
             onClick={() => {
               localStorage.removeItem('user');
@@ -67,8 +71,13 @@ const HomePage = () => {
           >
             Logout
           </button>
-        </div>
-      </div>
+        </div> */}
+     {/* </div>
+       */}
+       {/* <StickyNote/> */}
+       {/* <NotesList/>
+        */}
+        <NotesPage/>
     </div>
   );
 };

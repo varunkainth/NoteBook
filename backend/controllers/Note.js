@@ -21,7 +21,7 @@ export const CreateNote = async (req, res) => {
       color: color || undefined,
       group: group || undefined,
     });
-
+    await note.save()
     const user = await User.findByIdAndUpdate(
       req.user._id,
       {
@@ -58,7 +58,7 @@ export const CreateNote = async (req, res) => {
         return res.status(500).json({ message: "Internal server error" });
       }
     }
-
+    console.log(note)
     res.status(201).json({ message: "Note created successfully.", note });
   } catch (err) {
     console.error("Create Note Error:", err);

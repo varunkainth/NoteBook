@@ -10,7 +10,12 @@ import UpdateProfile from "./components/UpdateProfile";
 import HomePage from "./components/Homepage";
 import Login from "./components/Login";
 import ProtectedRoute from "./state/auth/protectedRoute"; // Adjust the path as needed
+import { loadNotesFromLocalStorage } from "./state/notes/noteSlice";
+import StickyNotes from "./components/StickyNotes";
+import NotesDisplay from "./pages/NotesDisplay";
 
+
+store.dispatch(loadNotesFromLocalStorage());
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
@@ -29,21 +34,11 @@ root.render(
             path="/"
             element={<ProtectedRoute element={<HomePage />} />} // Protect HomePage route
           />
+          <Route path="/notes" element={<StickyNotes/>}/>
+          <Route path="/n" element={<NotesDisplay/>}/>
         </Routes>
       </Router>
     </ThemeProvider>
   </Provider>
-  <ThemeProvider>
-    
-    <Router>
-    <SideNavbar/>
-    
-      <Routes>
-        <Route path="/" element={<App />} />
-        <Route path="/Register" element={<Registration />} />
-        <Route path="/update-profile" element={<UpdateProfile />} />
-        <Route path="/sticky-notes" element={<StickyNotes />} />
-      </Routes>
-    </Router>
-  </ThemeProvider>
+  
 );

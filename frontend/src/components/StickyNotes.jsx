@@ -1,69 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
+import  { useState, useEffect } from 'react';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
-import { v4 as uuidv4 } from 'uuid';
 import StickyNote from './StickyNote';
-import { FaSearch } from 'react-icons/fa'; 
-
-const AppContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
-  background: #fce4ec;
-  height: 100vh;
-  font-family: 'Comic Sans MS', cursive, sans-serif;
-  padding-left: 250px; /* Adjust to leave space for the sidebar */
-`;
-
-const Button = styled.button`
-  padding: 10px 20px;
-  margin: 20px;
-  font-size: 1em;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  background: #ff88cc;
-  color: white;
-  &:hover {
-    background: #ff66bb;
-  }
-`;
-
-const SearchContainer = styled.div`
-  display: flex;
-  align-items: center;
-  background-color: #f5f5f5;
-  border-radius: 20px;
-  padding: 5px;
-  margin: 20px;
-  width: 300px;
-`;
-
-const SearchInput = styled.input`
-  padding: 10px;
-  font-size: 1em;
-  border: none;
-  background: transparent;
-  border-radius: 20px;
-  width: 100%;
-`;
-
-const SearchIcon = styled(FaSearch)`
-  color: #888;
-  font-size: 1.2em;
-  margin-right: 10px;
-`;
-
-const NotesContainer = styled.div`
-  display: grid;
-  grid-template-columns: repeat(4, 1fr); /* Limit to 4 notes per row */
-  gap: 20px; /* Space between notes */
-  padding: 10px;
-  width: 100%;
-  max-width: calc(100% - 250px); /* Leave space for the sidebar */
-  overflow-x: auto;
-`;
+import { FaSearch } from 'react-icons/fa';
 
 const colors = ['#ff88cc', '#ffdd55', '#88ffcc', '#88ddff', '#dd88ff'];
 
@@ -71,20 +9,20 @@ const StickyNotes = () => {
   const [notes, setNotes] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
 
+  // Load notes from local storage
   useEffect(() => {
-    const savedNotes = JSON.parse(localStorage.getItem('stickyNotes'));
-    if (savedNotes) {
-      setNotes(savedNotes);
-    }
+    const savedNotes = JSON.parse(localStorage.getItem('stickyNotes')) || [];
+    setNotes(savedNotes);
   }, []);
 
+  // Save notes to local storage
   useEffect(() => {
     localStorage.setItem('stickyNotes', JSON.stringify(notes));
   }, [notes]);
 
   const addNote = () => {
     const newNote = {
-      id: uuidv4(),
+      id: [Math.floor(Math.random())],
       content: '',
       color: colors[Math.floor(Math.random() * colors.length)],
       date: new Date().toLocaleDateString(),
@@ -131,21 +69,28 @@ const StickyNotes = () => {
   );
 
   return (
-    <AppContainer>
-      <SearchContainer>
-        <SearchIcon />
-        <SearchInput
+    <div className="flex flex-col items-center p-5 bg-pink-100 min-h-screen font-comic">
+      <div className="flex items-center bg-gray-100 rounded-full p-2 my-4 w-80">
+        <FaSearch className="text-gray-500 text-xl mr-2" />
+        <input
           type="text"
           placeholder="Search notes..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
+          className="w-full bg-transparent border-none text-lg"
         />
-      </SearchContainer>
-      <Button onClick={addNote}>Add Note</Button>
+      </div>
+      <button
+        onClick={addNote}
+        className="py-2 px-4 my-4 text-white bg-pink-400 rounded-md hover:bg-pink-300"
+      >
+        Add Note
+      </button>
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="notes" direction="horizontal">
           {(provided) => (
-            <NotesContainer
+            <div
+              className="flex gap-5 overflow-x-auto w-full max-w-screen-lg"
               {...provided.droppableProps}
               ref={provided.innerRef}
             >
@@ -160,18 +105,12 @@ const StickyNotes = () => {
                 />
               ))}
               {provided.placeholder}
-            </NotesContainer>
+            </div>
           )}
         </Droppable>
       </DragDropContext>
-    </AppContainer>
+    </div>
   );
 };
 
 export default StickyNotes;
-
-
-
-
-
-
