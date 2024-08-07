@@ -1,4 +1,9 @@
-
+body {
+  height: 100%;
+  margin: 0;
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+  background-color: #fce4ec;
+}
 .update-profile {
     max-width: 600px;
     margin: 20px auto;
