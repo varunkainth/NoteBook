@@ -1,20 +1,24 @@
+
 import React, { useEffect } from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
 import './App.css';
+import './Theme.css'; 
+import { useTheme, ThemeProvider } from './ThemeContext'; 
 import Registration from './components/Registration';
 
 function App() {
+  const { theme, toggleTheme } = useTheme();
+
   useEffect(() => {
     const generateBubbles = () => {
       const container = document.querySelector('.landing-page');
 
-      
       container.querySelectorAll('.bubble').forEach(bubble => bubble.remove());
 
       for (let i = 0; i < 10; i++) {
         const bubble = document.createElement('div');
         bubble.classList.add('bubble');
-      
+
         bubble.style.width = `${Math.random() * 60 + 40}px`;
         bubble.style.height = bubble.style.width;
         bubble.style.left = `${Math.random() * 100}vw`;
@@ -24,7 +28,7 @@ function App() {
     };
 
     generateBubbles();
-    const interval = setInterval(generateBubbles, 3000); // 
+    const interval = setInterval(generateBubbles, 3000);
 
     return () => clearInterval(interval);
   }, []);
@@ -44,6 +48,7 @@ function App() {
           <Link to="/Login">
             <button className="btn">Login</button>
           </Link>
+          
         </div>
       </main>
       <footer className="footer">
@@ -53,5 +58,10 @@ function App() {
   );
 }
 
-export default App;
+export default () => (
+  <ThemeProvider>
+    <App />
+  </ThemeProvider>
+);
+
 
