@@ -18,7 +18,7 @@ app.use(
 app.use(cookieParser());
 app.use(
   cors({
-    origin: ["*","https://supreme-space-goldfish-vgwjr44x77p2pq45-3000.app.github.dev"],
+    origin: ["*","https://supreme-space-goldfish-vgwjr44x77p2pq45-3000.app.github.dev","https://note-book-henna.vercel.app"],
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
   })
 );
