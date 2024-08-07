@@ -1,8 +1,10 @@
+/* eslint-disable react/no-unescaped-entities */
+/* eslint-disable no-unused-vars */
 import  { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearAuthError, registerUser } from '../state/auth/AuthSlice';
 import './Registration.css';
-import {  useNavigate } from 'react-router-dom';
+import {  Link, useNavigate } from 'react-router-dom';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -106,7 +108,7 @@ const Register = () => {
 
   return (
     <div className='container'>
-      <div className="registration-form p-4 max-w-lg mx-auto bg-white shadow-md rounded-lg">
+      <div className="registration-form p-4 max-w-lg text-[#000] mx-auto bg-white shadow-md rounded-lg">
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="block text-gray-700">Name:</label>
@@ -196,7 +198,7 @@ const Register = () => {
               </label>
             </div>
           </div>
-          <div className="mb-4">
+          {/* <div className="mb-4">
             <label className="block text-gray-700">Profile Picture:</label>
             <input
               type="file"
@@ -211,7 +213,7 @@ const Register = () => {
                 className="mt-2 w-24 h-24 object-cover rounded-full"
               />
             )}
-          </div>
+          </div> */}
           <div className="mb-4">
             <button
               type="submit"
@@ -224,7 +226,16 @@ const Register = () => {
           {submitSuccess && <p className="text-green-500">{submitSuccess}</p>}
           {error && <p className="text-red-500">{error}</p>}
         </form>
+        <div className="mt-6 text-center">
+          <p className="text-sm text-gray-600">
+            Already have an account?{' '}
+            <Link to="/login" className="text-indigo-600 hover:text-indigo-700">
+              Login here
+            </Link>
+          </p>
+        </div>
       </div>
+      
     </div>
   );
 };
