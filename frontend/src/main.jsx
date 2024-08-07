@@ -6,6 +6,7 @@ import Registration from './components/Registration';
 import { ThemeProvider } from './ThemeContext';
 import SideNavbar from './components/SideNavbar';
 import UpdateProfile from './components/UpdateProfile';
+import StickyNotes from './components/StickyNotes';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -19,8 +20,8 @@ root.render(
         <Route path="/" element={<App />} />
         <Route path="/Register" element={<Registration />} />
         <Route path="/update-profile" element={<UpdateProfile />} />
+        <Route path="/sticky-notes" element={<StickyNotes />} />
       </Routes>
     </Router>
   </ThemeProvider>
 );
-
