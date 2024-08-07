@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import './Registration.css';
-
+import { useNavigate } from 'react-router-dom';
+import '../App.css';
 
 const Register = () => {
   const [name, setName] = useState('');
@@ -12,6 +12,7 @@ const Register = () => {
   const [DOB, setDOB] = useState('');
   const [profilePicture, setProfilePicture] = useState(null);
   const [submitSuccess, setSubmitSuccess] = useState('');
+  const navigate = useNavigate(); // Add useNavigate hook
 
   const validateEmail = (email) => {
     const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -69,6 +70,9 @@ const Register = () => {
       setPassword('');
       setDOB('');
       setProfilePicture(null);
+
+      // Navigate to StickyNotes after successful registration
+      navigate('/StickyNotes');
     } catch (error) {
       console.error('Error during registration:', error);
       alert('Failed to register. Please try again later.');
@@ -101,7 +105,6 @@ const Register = () => {
 
   return (
     <>
-      
       <div className='container'>
         <div className="registration-form">
           <form onSubmit={handleSubmit}>
