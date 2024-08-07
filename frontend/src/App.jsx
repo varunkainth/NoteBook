@@ -1,10 +1,10 @@
 
 import React, { useEffect } from 'react';
-import { Routes, Route, Link } from 'react-router-dom';
+import {  Link } from 'react-router-dom';
 import './App.css';
 import './Theme.css'; 
 import { useTheme, ThemeProvider } from './ThemeContext'; 
-import Registration from './components/Registration';
+
 
 function App() {
   const { theme, toggleTheme } = useTheme();
@@ -58,10 +58,12 @@ function App() {
   );
 }
 
+
 export default () => (
   <ThemeProvider>
     <App />
   </ThemeProvider>
+  
 );
 
 

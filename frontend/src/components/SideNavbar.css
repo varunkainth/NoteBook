@@ -1,4 +1,4 @@
-
+/* Sidebar styling */
 .sidebar {
   height: 100%;
   width: 250px;
@@ -14,6 +14,7 @@
   transition: width 0.3s ease, opacity 0.3s ease;
 }
 
+/* Sidebar header styling */
 .sidebar-header {
   font-size: 1.5em;
   color: white;
@@ -21,6 +22,40 @@
   text-align: center;
 }
 
+/* Profile section styling */
+.sidebar-profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.profile-picture {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 10px;
+  border: 2px solid white;
+}
+
+.profile-info {
+  text-align: center;
+  color: white;
+}
+
+.profile-name {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin: 0;
+}
+
+.profile-email {
+  font-size: 0.9em;
+  margin: 0;
+}
+
+/* Menu styling */
 .sidebar-menu {
   width: 100%;
 }
@@ -53,37 +88,35 @@
   color: #ffe4e1;
 }
 
+/* Responsive styles */
 @media (max-width: 768px) {
   .sidebar {
-      width: 200px;
+    width: 200px;
   }
   
   .sidebar-header {
-      font-size: 1.2em;
+    font-size: 1.2em;
   }
 
   .sidebar-item {
-      font-size: 1em;
-      padding: 12px;
+    font-size: 1em;
+    padding: 12px;
   }
 }
 
 @media (max-width: 480px) {
   .sidebar {
-      display: none;
-      opacity: 0;
+    display: none;
+    opacity: 0;
   }
   
   .sidebar-header {
-      font-size: 1em;
+    font-size: 1em;
   }
 
   .sidebar-item {
-      font-size: 0.9em;
-      padding: 10px;
-      margin-bottom: 5px;
+    font-size: 0.9em;
+    padding: 10px;
+    margin-bottom: 5px;
   }
 }
-
-
-  

@@ -8,12 +8,11 @@ export const registerUser = createAsyncThunk(
   'auth/registerUser',
   async (userData, { rejectWithValue }) => {
     try {
-      const response = await api.post('/api/auth/register', userData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+      console.log('Registering user with data:', userData);
+      const response = await api.post('/api/auth/register', userData);
+      console.log(response.data)
       return response.data;
+      
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'An error occurred');
     }
@@ -26,6 +25,7 @@ export const loginUser = createAsyncThunk(
     try {
       const response = await api.post('/api/auth/login', credentials);
       return response.data;
+
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'An error occurred');
     }
@@ -36,7 +36,7 @@ export const logoutUser = createAsyncThunk(
   'auth/logoutUser',
   async (_, { rejectWithValue }) => {
     try {
-      await api.post('/api/auth/logout');
+      await api.get('/api/auth/logout');
       return;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'An error occurred');
@@ -45,8 +45,8 @@ export const logoutUser = createAsyncThunk(
 );
 
 const initialState = {
-  user: null,
-  token: null,
+  user: JSON.parse(localStorage.getItem('user')) || null,
+  token: localStorage.getItem('token') || null,
   loading: false,
   error: null,
 };
@@ -59,12 +59,14 @@ const authSlice = createSlice({
       state.error = null;
     },
     setUser: (state, action) => {
-      state.user = action.payload.user;
+      state.user = action.payload;
       state.token = action.payload.token;
     },
     clearUser: (state) => {
       state.user = null;
       state.token = null;
+      localStorage.removeItem('user'); // Remove user from localStorage
+      localStorage.removeItem('token');
     },
   },
   extraReducers: (builder) => {
@@ -78,6 +80,7 @@ const authSlice = createSlice({
         state.user = action.payload.user;
         state.token = action.payload.token;
         // Optionally store token in localStorage or sessionStorage
+        localStorage.setItem("user",JSON.stringify(action.payload.user))
         localStorage.setItem('token', action.payload.token);
       })
       .addCase(registerUser.rejected, (state, action) => {
@@ -93,6 +96,7 @@ const authSlice = createSlice({
         state.user = action.payload.user;
         state.token = action.payload.token;
         // Optionally store token in localStorage or sessionStorage
+        localStorage.setItem("user",JSON.stringify(action.payload.user))
         localStorage.setItem('token', action.payload.token);
       })
       .addCase(loginUser.rejected, (state, action) => {
@@ -108,6 +112,7 @@ const authSlice = createSlice({
         state.user = null;
         state.token = null;
         // Optionally remove token from localStorage or sessionStorage
+        localStorage.removeItem('user');
         localStorage.removeItem('token');
       })
       .addCase(logoutUser.rejected, (state, action) => {

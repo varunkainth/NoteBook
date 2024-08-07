@@ -7,6 +7,15 @@ export const AuthRegister = async (req, res) => {
   try {
     // Destructure request body
     const { email, password, name, dob, phoneNumber, gender } = req.body;
+    console.log({
+
+      name,
+      email,
+      password,
+      dob,
+      phoneNumber,
+      gender
+    })
 
     // Validate input fields
     if (!email || !password || !name || !dob || !phoneNumber || !gender) {

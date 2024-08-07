@@ -1,193 +1,232 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import  { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { clearAuthError, registerUser } from '../state/auth/AuthSlice';
 import './Registration.css';
-
+import {  useNavigate } from 'react-router-dom';
 
 const Register = () => {
-  const [name, setName] = useState('');
-  const [userName, setUserName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [password, setPassword] = useState('');
-  const [DOB, setDOB] = useState('');
-  const [profilePicture, setProfilePicture] = useState(null);
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phoneNumber: '',
+    password: '',
+    dob: '',
+    profilePicture: null,
+    gender: '',
+  });
+
+  const [profilePicturePreview, setProfilePicturePreview] = useState(null);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { loading, error } = useSelector((state) => state.auth);
   const [submitSuccess, setSubmitSuccess] = useState('');
+  const [validationErrors, setValidationErrors] = useState({});
 
-  const validateEmail = (email) => {
-    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(String(email).toLowerCase());
+  const validateForm = () => {
+    const errors = {};
+    const { name, email, password } = formData;
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      errors.email = 'Please enter a valid email address.';
+    }
+
+    // Name validation
+    if (name.trim().length === 0) {
+      errors.name = 'Name is required.';
+    }
+
+    // Password validation
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[\W_])[A-Za-z\d\W_]{6,}$/;
+    if (!passwordRegex.test(password)) {
+      errors.password = 'Password must be at least 6 characters long, with at least one uppercase letter, one number, and one special character.';
+    }
+
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
   };
 
-  const validateUserName = (userName) => {
-    const re = /^[a-zA-Z0-9_]{3,16}$/;
-    return re.test(String(userName));
-  };
-
-  const validatePassword = (password) => {
-    const re = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-    return re.test(String(password));
+  const handleChange = (event) => {
+    const { name, value, type, files } = event.target;
+    if (type === 'file') {
+      const file = files[0];
+      setFormData((prevState) => ({
+        ...prevState,
+        [name]: file,
+      }));
+      setProfilePicturePreview(URL.createObjectURL(file));
+    } else if (type === 'radio') {
+      setFormData((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
+    } else {
+      setFormData((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
+    }
+    setSubmitSuccess('');
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (!validateEmail(email)) {
-      alert('Please enter a valid email address.');
-      return;
-    }
-    if (!validateUserName(userName)) {
-      alert('Username should be 3-16 characters long and can contain letters, numbers, and underscores.');
-      return;
-    }
-    if (!validatePassword(password)) {
-      alert('Password should be at least 8 characters long and contain at least one letter and one number.');
-      return;
-    }
+    if (!validateForm()) return;
 
-    const formData = new FormData();
-    formData.append('name', name);
-    formData.append('userName', userName);
-    formData.append('email', email);
-    formData.append('phone', phone);
-    formData.append('password', password);
-    formData.append('DOB', DOB);
-    if (profilePicture) {
-      formData.append('profilePicture', profilePicture);
-    }
+    const userData = {
+      name: formData.name,
+      email: formData.email,
+      phoneNumber: formData.phoneNumber,
+      password: formData.password,
+      dob: formData.dob,
+      gender: formData.gender,
+      // Note: profilePicture is not included since it's usually not sent with JSON
+    };
 
     try {
-      const response = await axios.post('YOUR_API_ENDPOINT', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
+      const data = await dispatch(registerUser(userData)).unwrap();
+      setSubmitSuccess(`Registration successful for ${data.user.name}!`);
+      setFormData({
+        name: '',
+        email: '',
+        phoneNumber: '',
+        password: '',
+        dob: '',
+        profilePicture: null,
+        gender: '',
       });
-      console.log(response.data);
-      setSubmitSuccess(`Registration successful for ${name}!`);
-      setName('');
-      setUserName('');
-      setEmail('');
-      setPhone('');
-      setPassword('');
-      setDOB('');
-      setProfilePicture(null);
+      setProfilePicturePreview(null);
+      dispatch(clearAuthError());
+      navigate('/');
     } catch (error) {
-      console.error('Error during registration:', error);
-      alert('Failed to register. Please try again later.');
-    }
-  };
-
-  const handleChange = (setter) => (event) => {
-    setter(event.target.value);
-    setSubmitSuccess('');
-  };
-
-  const handleFileChange = (event) => {
-    setProfilePicture(event.target.files[0]);
-    setSubmitSuccess('');
-  };
-
-  const handleSparkEffect = (event) => {
-    const button = event.currentTarget;
-    for (let i = 0; i < 10; i++) {
-      const spark = document.createElement('div');
-      spark.classList.add('spark');
-      const x = Math.random() * 2 - 1;
-      const y = Math.random() * 2 - 1;
-      spark.style.setProperty('--spark-x', `${x * 30}px`);
-      spark.style.setProperty('--spark-y', `${y * 30}px`);
-      button.appendChild(spark);
-      spark.addEventListener('animationend', () => spark.remove());
+      console.error('Registration failed:', error);
     }
   };
 
   return (
-    <>
-      
-      <div className='container'>
-        <div className="registration-form">
-          <form onSubmit={handleSubmit}>
-            <span>
-              Name:
-              <input
-                type="text"
-                id="name"
-                value={name}
-                onChange={handleChange(setName)}
-                required
-                placeholder="Enter your name"
-              />
-            </span>
-            <span>
-              Username:
-              <input
-                type="text"
-                id="userName"
-                value={userName}
-                onChange={handleChange(setUserName)}
-                required
-                placeholder="Enter your username"
-              />
-            </span>
-            <span>
-              Email:
-              <input
-                type="email"
-                id="email"
-                value={email}
-                onChange={handleChange(setEmail)}
-                required
-                placeholder="Enter your email"
-              />
-            </span>
-            <span>
-              Phone:
-              <input
-                type="tel"
-                id="phone"
-                value={phone}
-                onChange={handleChange(setPhone)}
-                required
-                placeholder="Enter your phone number"
-              />
-            </span>
-            <span>
-              Password:
-              <input
-                type="password"
-                id="password"
-                value={password}
-                onChange={handleChange(setPassword)}
-                required
-                placeholder="Enter your password"
-              />
-            </span>
-            <span>
-              Date of Birth:
-              <input
-                type="date"
-                id="DOB"
-                value={DOB}
-                onChange={handleChange(setDOB)}
-              />
-            </span>
-            <span>
-              Profile Picture:
-              <input
-                type="file"
-                id="profilePicture"
-                onChange={handleFileChange}
-              />
-            </span>
-            <div className="spark-container">
-              <button type="submit" onClick={handleSparkEffect}>Register</button>
+    <div className='container'>
+      <div className="registration-form p-4 max-w-lg mx-auto bg-white shadow-md rounded-lg">
+        <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <label className="block text-gray-700">Name:</label>
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              required
+              placeholder="Enter your name"
+              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200"
+            />
+            {validationErrors.name && <p className="text-red-500 mt-1">{validationErrors.name}</p>}
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Email:</label>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+              placeholder="Enter your email"
+              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200"
+            />
+            {validationErrors.email && <p className="text-red-500 mt-1">{validationErrors.email}</p>}
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Phone:</label>
+            <input
+              type="tel"
+              name="phoneNumber"
+              value={formData.phoneNumber}
+              onChange={handleChange}
+              required
+              placeholder="Enter your phone number"
+              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Password:</label>
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+              placeholder="Enter your password"
+              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200"
+            />
+            {validationErrors.password && <p className="text-red-500 mt-1">{validationErrors.password}</p>}
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Date of Birth:</label>
+            <input
+              type="date"
+              name="dob"
+              value={formData.dob}
+              onChange={handleChange}
+              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Gender:</label>
+            <div className="flex space-x-4">
+              <label className="flex items-center">
+                <input
+                  type="radio"
+                  name="gender"
+                  value="male"
+                  checked={formData.gender === 'male'}
+                  onChange={handleChange}
+                  className="form-radio h-4 w-4 text-indigo-600"
+                />
+                <span className="ml-2 text-gray-700">Male</span>
+              </label>
+              <label className="flex items-center">
+                <input
+                  type="radio"
+                  name="gender"
+                  value="female"
+                  checked={formData.gender === 'female'}
+                  onChange={handleChange}
+                  className="form-radio h-4 w-4 text-indigo-600"
+                />
+                <span className="ml-2 text-gray-700">Female</span>
+              </label>
             </div>
-            {submitSuccess && <p>{submitSuccess}</p>}
-          </form>
-        </div>
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Profile Picture:</label>
+            <input
+              type="file"
+              name="profilePicture"
+              onChange={handleChange}
+              className="mt-1"
+            />
+            {profilePicturePreview && (
+              <img
+                src={profilePicturePreview}
+                alt="Profile Preview"
+                className="mt-2 w-24 h-24 object-cover rounded-full"
+              />
+            )}
+          </div>
+          <div className="mb-4">
+            <button
+              type="submit"
+              className="px-4 py-2 bg-indigo-600 text-white font-semibold rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              disabled={loading}
+            >
+              {loading ? 'Registering...' : 'Register'}
+            </button>
+          </div>
+          {submitSuccess && <p className="text-green-500">{submitSuccess}</p>}
+          {error && <p className="text-red-500">{error}</p>}
+        </form>
       </div>
-    </>
+    </div>
   );
 };
 
 export default Register;
-
-
