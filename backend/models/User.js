@@ -35,7 +35,7 @@ const userSchema = new Schema(
       type: String,
       enum: ["male", "female", "other"],
     },
-    notesId: [
+    notes: [
       {
         type: Schema.Types.ObjectId,
         ref: "Note",

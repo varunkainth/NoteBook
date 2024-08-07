@@ -7,6 +7,15 @@ export const AuthRegister = async (req, res) => {
   try {
     // Destructure request body
     const { email, password, name, dob, phoneNumber, gender } = req.body;
+    console.log({
+
+      name,
+      email,
+      password,
+      dob,
+      phoneNumber,
+      gender
+    })
 
     // Validate input fields
     if (!email || !password || !name || !dob || !phoneNumber || !gender) {
@@ -113,7 +122,7 @@ export const AuthLogin = async (req, res) => {
     res.header("Authorization", `Bearer ${token}`);
     const userWithNotes = await User.findById(user._id)
       .select("-password")
-      .populate("notesId");
+      .populate("notes");
 
     return res.status(200).json({
       message: "User logged in successfully.",
