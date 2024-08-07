@@ -1,0 +1,146 @@
+
+.update-profile {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 10px;
+  
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .update-profile h2 {
+    text-align: center;
+    color: #ff69b4; 
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    margin-bottom: 20px;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  .form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #ff1493; 
+  }
+  
+  .form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ff69b4;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box;
+  }
+  
+  .profile-photo-preview {
+    display: block;
+    max-width: 150px;
+    height: auto;
+    margin-top: 10px;
+    border-radius: 8px;
+    border: 2px solid #ff69b4;
+  }
+  
+  button {
+    background-color: #ff69b4;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  button:hover {
+    background-color: #ff1493;
+    transform: scale(1.05);
+  }
+.profile-photo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .profile-photo-preview {
+    display: block;
+    max-width: 150px;
+    height: 150px; 
+    margin-top: 10px;
+    border-radius: 50%;
+    border: 2px solid #ff69b4;
+    object-fit: cover; 
+  }
+  
+  .profile-photo-placeholder {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background-color: #ffe4e1; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid #ff69b4;
+  }
+  
+  .profile-photo-placeholder svg {
+    color: #ff69b4;
+    font-size: 60px; 
+  }
+  
+  
+  @media (max-width: 768px) {
+    .update-profile {
+      padding: 15px;
+    }
+  
+    .form-group input {
+      font-size: 14px;
+      padding: 8px;
+    }
+  
+    button {
+      padding: 10px 20px;
+      font-size: 14px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .update-profile {
+      padding: 10px;
+      margin: 10px;
+    }
+  
+    .form-group input {
+      font-size: 12px;
+      padding: 6px;
+    }
+  
+    button {
+      padding: 8px 16px;
+      font-size: 12px;
+    }
+  }
+  
+  
+.main-content {
+    margin-left: 250px;
+    padding: 20px;
+    transition: margin-left 0.3s ease; 
+}
+
+@media (max-width: 768px) {
+    .main-content {
+        margin-left: 200px; 
+    }
+}
+
+@media (max-width: 480px) {
+    .main-content {
+        margin-left: 0; 
+    }
+}
